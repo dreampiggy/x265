@@ -31,17 +31,17 @@ x265 is a free software library and application for encoding video streams into 
   s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '2.0'
 
-  s.source_files = 'source/x265.{h,cpp}', 'source/x265_config.h', 'source/input/**/*.{h,c,cpp,hpp}', 'source/output/**/*.{h,c,cpp,hpp}', 'source/encoder/**/*.{h,c,cpp,hpp}', 'source/common/**/*.{h,c,cpp,hpp}'
+  s.source_files = 'source/x265.{h,cpp}', 'source/x265_config.h', 'source/common/*.{h,c,cpp,hpp}', 'source/input/*.{h,c,cpp,hpp}', 'source/output/*.{h,c,cpp,hpp}', 'source/encoder/*.{h,c,cpp,hpp}'
+  s.exclude_files = 'source/common/arm/**/*', 'source/common/x86/**/*', 'source/common/ppc/**/*', 'source/common/vec/**/*'
   # Config the x265 build version string in `x265_config.h`, update when bumped version
   s.prepare_command = <<-CMD
-                      ls -lash
                       cp './source/x265_config.h.in' './source/x265_config.h'
-                      sed -i 's/${X265_BUILD}/169/g' './source/x265_config.h'
+                      sed -i.bak 's/\\${X265_BUILD}/169/g' './source/x265_config.h'
                       CMD
   s.public_header_files = 'source/x265.h', 'source/x265_config.h'
-  s.preserve_path = 'source'
+  s.preserve_paths = 'source/**/*'
   s.xcconfig = {
     'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) X265_DEPTH=8 HAVE_STRTOK_R=1 EXPORT_C_API=1 X265_NS=x265 X265_VERSION=3.0',
-    'USER_HEADER_SEARCH_PATHS' => '$(inherited) $(SRCROOT)/x265/source'
+    'USER_HEADER_SEARCH_PATHS' => '$(PODS_TARGET_SRCROOT)/source'
   }
 end
